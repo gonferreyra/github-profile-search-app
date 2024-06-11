@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  position: relative;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  min-height: 100vh;
+  background: #20293a;
+}
