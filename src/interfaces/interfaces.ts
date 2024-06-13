@@ -36,10 +36,10 @@ export interface ApiUserResponse {
 export interface ApiReposResponse {
   id: number;
   name: string;
-  url: string;
+  html_url: string;
   forks: number;
   watchers: number;
-  updated_at: Date;
+  updated_at: string;
   description: string;
   license: License | null;
 }
