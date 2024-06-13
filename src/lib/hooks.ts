@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { ApiReposResponse, ApiUserResponse } from '../interfaces/interfaces';
 import { BASE_API_URL } from './constants';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { handleError } from './utils';
-
-// type GitHubApiResponse = {
-//   data: ApiUserResponse;
-// };
+import { GithubProfileContext } from '../contexts/GithubProfileContextProvider';
 
 export const fetchGithubProfiles = async (
   userName: string,
@@ -49,7 +46,7 @@ export const fetchGithubRepos = async (
   }
 
   const data = await response.json();
-  console.log(data);
+
   return data;
 };
 
@@ -83,4 +80,17 @@ export function useDebounce(textToFetch: string) {
   }, [textToFetch]);
 
   return { debouncedValue };
+}
+
+// ----------------------------------------------------------------------
+
+export function useGithubProfileContext() {
+  const context = useContext(GithubProfileContext);
+  if (!context) {
+    throw new Error(
+      'useGithubProfileContext must be used within a GithubProfileContextProvider',
+    );
+  }
+
+  return context;
 }
