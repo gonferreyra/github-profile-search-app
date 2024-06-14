@@ -1,11 +1,13 @@
-import { createContext, useState } from 'react';
-import { useDebounce, useSearchQuery, useSearchReposQuery } from '../lib/hooks';
+import { createContext, useCallback, useMemo, useState } from 'react';
+import {
+  useSearchQuery,
+  useSearchReposQuery,
+  useUserSearchContext,
+} from '../lib/hooks';
 import { ApiReposResponse, ApiUserResponse } from '../interfaces/interfaces';
-import { differenceInDays, parseISO } from 'date-fns';
+import { compareDesc, differenceInDays, parseISO } from 'date-fns';
 
 type GithubProfileContextType = {
-  userSearch: string;
-  handleUserSearch: (value: string) => void;
   profileData: ApiUserResponse | undefined;
   isLoadingQuery: boolean;
   isErrorQuery: boolean;
@@ -15,6 +17,7 @@ type GithubProfileContextType = {
   numberOfReposToShow: number;
   handleNumberOfReposToShow: () => void;
   calculateDaysSinceUpdate: (updatedAt: string) => number;
+  sortedRepos: ApiReposResponse[] | undefined;
 };
 
 export const GithubProfileContext =
@@ -28,11 +31,10 @@ export default function GithubProfileContextProvider({
   children,
 }: GithubProfileContextProviderProps) {
   // state
-  const [userSearch, setUserSearch] = useState('GitHub');
   const [numberOfReposToShow, setNumberOfReposToShow] = useState(4);
 
-  // debounce
-  const { debouncedValue } = useDebounce(userSearch);
+  // dependency on other context
+  const { debouncedValue } = useUserSearchContext();
 
   // searchQuery
   const {
@@ -46,17 +48,22 @@ export default function GithubProfileContextProvider({
     isError: isErrorRepos,
   } = useSearchReposQuery(debouncedValue);
 
+  // Sorted repos by the date of last update
+  const sortedRepos = useMemo(
+    () =>
+      [...(reposData || [])].sort((a, b) =>
+        compareDesc(parseISO(a.updated_at), parseISO(b.updated_at)),
+      ),
+    [reposData],
+  );
+
   const totalRepos = reposData?.length || 4;
 
-  const handleUserSearch = (value: string) => {
-    setUserSearch(value);
-  };
-
-  const handleNumberOfReposToShow = () => {
+  const handleNumberOfReposToShow = useCallback(() => {
     setNumberOfReposToShow(totalRepos);
-  };
+  }, [totalRepos]);
 
-  function calculateDaysSinceUpdate(updatedAt: string) {
+  const calculateDaysSinceUpdate = useCallback((updatedAt: string) => {
     // Parse the ISO date string
     const updatedDate = parseISO(updatedAt);
     // Get the current date
@@ -65,24 +72,37 @@ export default function GithubProfileContextProvider({
     const difference = differenceInDays(currentDate, updatedDate);
 
     return difference;
-  }
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      profileData,
+      isLoadingQuery,
+      isErrorQuery,
+      reposData,
+      isLoadingRepos,
+      isErrorRepos,
+      numberOfReposToShow,
+      handleNumberOfReposToShow,
+      calculateDaysSinceUpdate,
+      sortedRepos,
+    }),
+    [
+      profileData,
+      isLoadingQuery,
+      isErrorQuery,
+      reposData,
+      isLoadingRepos,
+      isErrorRepos,
+      numberOfReposToShow,
+      handleNumberOfReposToShow,
+      calculateDaysSinceUpdate,
+      sortedRepos,
+    ],
+  );
 
   return (
-    <GithubProfileContext.Provider
-      value={{
-        userSearch,
-        handleUserSearch,
-        profileData,
-        isLoadingQuery,
-        isErrorQuery,
-        reposData,
-        isLoadingRepos,
-        isErrorRepos,
-        numberOfReposToShow,
-        handleNumberOfReposToShow,
-        calculateDaysSinceUpdate,
-      }}
-    >
+    <GithubProfileContext.Provider value={contextValue}>
       {children}
     </GithubProfileContext.Provider>
   );

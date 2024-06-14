@@ -4,6 +4,7 @@ import { BASE_API_URL } from './constants';
 import { useContext, useEffect, useState } from 'react';
 import { handleError } from './utils';
 import { GithubProfileContext } from '../contexts/GithubProfileContextProvider';
+import { UserSearchContext } from '../contexts/UserSearchContextProvider';
 
 export const fetchGithubProfiles = async (
   userName: string,
@@ -38,7 +39,9 @@ export const useSearchQuery = (userName: string) => {
 export const fetchGithubRepos = async (
   userName: string,
 ): Promise<ApiReposResponse[]> => {
-  const response = await fetch(`${BASE_API_URL}/${userName}/repos`);
+  const response = await fetch(
+    `${BASE_API_URL}/${userName}/repos?per_page=100`,
+  );
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -89,6 +92,19 @@ export function useGithubProfileContext() {
   if (!context) {
     throw new Error(
       'useGithubProfileContext must be used within a GithubProfileContextProvider',
+    );
+  }
+
+  return context;
+}
+
+// ----------------------------------------------------------------------
+
+export function useUserSearchContext() {
+  const context = useContext(UserSearchContext);
+  if (!context) {
+    throw new Error(
+      'useUserSearchContext must be used within a useUserSearchContextProvider',
     );
   }
 

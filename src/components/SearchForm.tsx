@@ -1,7 +1,7 @@
-import { useGithubProfileContext } from '../lib/hooks';
+import { useUserSearchContext } from '../lib/hooks';
 
 export default function SearchForm() {
-  const { userSearch, handleUserSearch } = useGithubProfileContext();
+  const { userSearch, handleUserSearch } = useUserSearchContext();
 
   return (
     <form className='relative mx-auto max-w-[450px] pt-8'>
