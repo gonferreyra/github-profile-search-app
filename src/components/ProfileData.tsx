@@ -1,5 +1,6 @@
 import { BounceLoader } from 'react-spinners';
 import { useGithubProfileContext } from '../lib/hooks';
+import RepoItem from './RepoItem';
 
 export default function ProfileData() {
   const {
@@ -8,9 +9,7 @@ export default function ProfileData() {
     isLoadingQuery,
     isLoadingRepos,
     profileData,
-    reposData,
     numberOfReposToShow,
-    calculateDaysSinceUpdate,
     handleNumberOfReposToShow,
   } = useGithubProfileContext();
 
@@ -24,7 +23,7 @@ export default function ProfileData() {
           </p>
         </div>
       ) : isLoadingQuery || isLoadingRepos ? (
-        <div className='relative mx-auto mt-48 w-[60px] text-center lg:ml-0'>
+        <div className='relative mx-auto mt-48 w-[60px] text-center'>
           <BounceLoader color='#fff' />
         </div>
       ) : (
@@ -61,42 +60,7 @@ export default function ProfileData() {
             <h2 className='text-[#6a7993]'>{profileData?.bio}</h2>
 
             <div className='my-6 grid grid-cols-1 gap-6 lg:grid-cols-2'>
-              {reposData?.slice(0, numberOfReposToShow).map((repo) => {
-                const daysSinceUpdate = calculateDaysSinceUpdate(
-                  repo.updated_at,
-                );
-                return (
-                  <a
-                    href={repo.html_url}
-                    target='_blank'
-                    key={repo.id}
-                    className='rounded-xl bg-box-gradient p-4'
-                  >
-                    <h3 className='text-title-text'>{repo.name}</h3>
-                    <p className='pb-3 pt-1 text-body-text text-[#6a7993]'>
-                      {repo.description}
-                    </p>
-                    <div className='flex items-center gap-4'>
-                      <p className='flex gap-2 text-body-text'>
-                        <img src='src/assets/Chield_alt.svg' alt='chield-img' />
-                        {repo.license?.name || 'No license'}
-                      </p>
-                      <p className='flex gap-2'>
-                        <img src='src/assets/Nesting.svg' alt='nesting-img' />
-                        {repo.forks}
-                      </p>
-                      <p className='flex gap-2'>
-                        <img src='src/assets/Star.svg' alt='star-img' />
-                        {repo.watchers}
-                      </p>
-                      {/* hacer funcion que devuelva hace cuanto se actualizo */}
-                      <p className='text-small-text'>
-                        updated {daysSinceUpdate} days ago
-                      </p>
-                    </div>
-                  </a>
-                );
-              })}
+              <RepoItem />
             </div>
 
             <div className='mb-12 mt-8 text-center'>
