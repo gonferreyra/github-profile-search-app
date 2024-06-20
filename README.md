@@ -43,19 +43,33 @@ User Stories:
 
 ### Demo
 
-The site is hosted [here](https://)
+The site is hosted [here](https://github-profile-search-app.vercel.app/)
 
 ### Screenshots
 
-640px - Mobile
+430px - Mobile
+
+![mobile430px](preview/430x932.png)
+
+624px - Mobile
+
+![mobile640px](preview/640px.png)
 
 1024px - Desktop
 
+![desktop1024px](preview/1024px.png)
+
 1280px - Large Desktop
+
+![desktop1280px](preview/1280x800.png)
+
+1440px - Large Desktop
+
+![desktop1440px](preview/1440x900.png)
 
 ### Build With
 
-The technologies used for this application were React with Typescript. Tailwind was used for styling. React-Query to retrieve data with caching.
+The technologies used for this application were React with Typescript. Tailwind was used for styling. React-Query to retrieve data with caching. Global states are managed through the contextApi.-
 
 ## How To Use
 
