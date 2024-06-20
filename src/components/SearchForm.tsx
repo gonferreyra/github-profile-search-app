@@ -7,7 +7,7 @@ export default function SearchForm() {
     <form className='relative mx-auto max-w-[450px] pt-8'>
       <button type='button' className='absolute left-4 top-3 pt-8'>
         <i>
-          <img src='src/assets/Search.svg' alt='search-icon' />
+          <img src={'/Search.svg'} alt='search-icon' />
         </i>
       </button>
       <input

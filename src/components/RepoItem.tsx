@@ -21,15 +21,15 @@ export default function RepoItem() {
             </p>
             <div className='flex items-center gap-4'>
               <p className='flex gap-2 text-body-text'>
-                <img src='src/assets/Chield_alt.svg' alt='chield-img' />
+                <img src={'/Chield_alt.svg'} alt='chield-img' />
                 {repo.license?.name || 'No license'}
               </p>
               <p className='flex gap-2'>
-                <img src='src/assets/Nesting.svg' alt='nesting-img' />
+                <img src={'/Nesting.svg'} alt='nesting-img' />
                 {repo.forks}
               </p>
               <p className='flex gap-2'>
-                <img src='src/assets/Star.svg' alt='star-img' />
+                <img src={'/Star.svg'} alt='star-img' />
                 {repo.watchers}
               </p>
               <p className='text-small-text'>

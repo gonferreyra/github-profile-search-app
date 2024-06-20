@@ -16,7 +16,7 @@ export default {
         mediumGray: '#4a5567',
       },
       backgroundImage: {
-        'hero-image': "url('/src/assets/hero-image-github-profile.png')",
+        'hero-image': "url('/hero-image-github-profile.png')",
         'box-gradient':
           'linear-gradient(90deg, rgba(17, 23, 41, 1) 19%, rgba(29, 27, 72, 1) 130%)',
       },
